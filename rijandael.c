@@ -34,22 +34,22 @@ unsigned int mixMatrix[4][4] = {
     {0x03, 0x01, 0x01, 0x02}
 };
 unsigned int key[4][4] = {
-    {0x5f, 0x59, 0xb3, 0x12},
-    {0x1c, 0x56, 0xf3, 0xc9},
-    {0x94, 0x81, 0x23, 0x28},
-    {0x2b, 0x75, 0x3c, 0x80}
+    {0xc9, 0x16, 0x9e, 0x79},
+    {0x7a, 0xce, 0x09, 0x38},
+    {0x97, 0x88, 0x8c, 0xd4},
+    {0xb3, 0xed, 0x96, 0xc6}
 };
 unsigned int roundKey[11][4][4];
 unsigned int state[4][4] = {
-    {0xa2, 0x4c, 0xb4, 0x72},
-    {0x33, 0x97, 0x6a, 0x83},
-    {0xdf, 0xce, 0x48, 0xde},
-    {0x20, 0x35, 0x6a, 0xaf}
+    {0x37, 0x36, 0xe4, 0x98},
+    {0xcf, 0xa5, 0xd2, 0x53},
+    {0x5f, 0xe5, 0x7b, 0x80},
+    {0xbe, 0xcc, 0x31, 0x04}
 };
 unsigned int temp[4] = {0, 0, 0, 0};
 unsigned int i, j, k, r, z;
 
-void encrypt() {
+void encrypt(char* output) {
     // Round 0
     generateRoundKey();
     addRoundKey(0);
@@ -74,7 +74,19 @@ void encrypt() {
     }
     shiftRow();
     addRoundKey(r);
-    printf("Läuft zumindest durch...");
+    for (j = 0; j < 4; j++) {
+        for(i = 0; i < 4; i++) {
+            printf("%x", state[i][j]);
+        }
+    }
+}
+
+void convert2array(char* string) {
+    for (j = 0; j < 4; j++) {
+        for(i = 0; i < 4; i++) {
+            //TODO tbd
+        }
+    }
 }
 
 unsigned int getSboxValue(unsigned int num) {
@@ -100,15 +112,33 @@ void mixColumn() {
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
             temp[i] = state[i][j];
+            state[i][j] = 0;
         }
         for (i = 0; i < 4; i++) {
-            switch(mixMatrix[j][i]) {
-                case 3: state[i][j] = t2(&state[i][j]) ^ temp[j];
-                    break;
-                case 2: state[i][j] = t2(&state[i][j]);
-                    break;
-                case 1:
-                default: state[i][j] = temp[j];
+            for (z = 0; z < 4; z++) {
+                switch (mixMatrix[i][z]) {
+                    case 3:
+                        if (z == 0) {
+                            state[i][j] = t2(temp[z]) ^ temp[z];
+                        } else {
+                            state[i][j] ^= t2(temp[z]) ^ temp[z];
+                        }
+                        break;
+                    case 2:
+                        if (z == 0) {
+                            state[i][j] = t2(temp[z]);
+                        } else {
+                            state[i][j] ^= t2(temp[z]);
+                        }
+                        break;
+                    case 1:
+                    default:
+                        if (z == 0) {
+                            state[i][j] = temp[z];
+                        } else {
+                            state[i][j] ^= temp[z];
+                        }
+                }
             }
         }
     }
@@ -123,35 +153,35 @@ void addRoundKey(unsigned int round) {
 }
 
 void generateRoundKey() {
-    for (i = 0; i < 4; i++) {
-        for (j = 0; j < 4; j++) {
+    for (j = 0; j < 4; j++) {
+        for (i = 0; i < 4; i++) {
             roundKey[0][i][j] = key[i][j];
         }
     }
     for (k = 1; k < 11; k++) {
-        temp[0] = roundKey[k - 1][3][0];
+        temp[0] = roundKey[k - 1][0][3];
 
-        for (j = 0; j < 4; j++) {
-            if (j < 3) {
-                roundKey[k][0][j] = roundKey[k - 1][3][j + 1];
+        for (i = 0; i < 4; i++) {
+            if (i < 3) {
+                roundKey[k][i][0] = roundKey[k - 1][i+1][3];
             } else {
-                roundKey[k][0][j] = temp[0];
+                roundKey[k][i][0] = temp[0];
             }
         }
 
-        for (j = 0; j < 4; j++) {
-            roundKey[k][0][j] = getSboxValue(roundKey[k][0][j]);
+        for (i = 0; i < 4; i++) {
+            roundKey[k][i][0] = getSboxValue(roundKey[k][i][0]);
 
-            if (j == 0) {
-                roundKey[k][0][j] ^= roundKey[k - 1][0][j] ^ getRconValue(k - 1);
+            if (i == 0) {
+                roundKey[k][i][0] ^= roundKey[k - 1][i][0] ^ getRconValue(k - 1);
             } else {
-                roundKey[k][0][j] ^= roundKey[k - 1][0][j];
+                roundKey[k][i][0] ^= roundKey[k - 1][i][0];
             }
         }
 
-        for (i = 1; i < 4; i++) {
-            for (j = 0; j < 4; j++) {
-                roundKey[k][i][j] = roundKey[k - 1][i][j] ^ roundKey[k][i - 1][j];
+        for (j = 1; j < 4; j++) {
+            for (i = 0; i < 4; i++) {
+                roundKey[k][i][j] = roundKey[k - 1][i][j] ^ roundKey[k][i][j - 1];
             }
         }
     }
