@@ -112,7 +112,6 @@ void mixColumn() {
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
             temp[i] = state[i][j];
-            state[i][j] = 0;
         }
         for (i = 0; i < 4; i++) {
             for (z = 0; z < 4; z++) {
@@ -161,6 +160,7 @@ void generateRoundKey() {
     for (k = 1; k < 11; k++) {
         temp[0] = roundKey[k - 1][0][3];
 
+        // RotWord
         for (i = 0; i < 4; i++) {
             if (i < 3) {
                 roundKey[k][i][0] = roundKey[k - 1][i+1][3];
@@ -170,8 +170,10 @@ void generateRoundKey() {
         }
 
         for (i = 0; i < 4; i++) {
+            // Substitute with Sbox
             roundKey[k][i][0] = getSboxValue(roundKey[k][i][0]);
 
+            // XOR Rcon
             if (i == 0) {
                 roundKey[k][i][0] ^= roundKey[k - 1][i][0] ^ getRconValue(k - 1);
             } else {
@@ -179,6 +181,7 @@ void generateRoundKey() {
             }
         }
 
+        // XOR Rest
         for (j = 1; j < 4; j++) {
             for (i = 0; i < 4; i++) {
                 roundKey[k][i][j] = roundKey[k - 1][i][j] ^ roundKey[k][i][j - 1];
