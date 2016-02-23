@@ -14,6 +14,10 @@
  */
 int main(int argc, char** argv) {
     encrypt();
+
+    // teste in1
+    in1();
+    
     return (EXIT_SUCCESS);
 }
 
