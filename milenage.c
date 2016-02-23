@@ -61,7 +61,7 @@ void in1(){
 
 void temp_m() {
 // TEMP is a 128-bit value used within the computation of the functions.
-// TEMP = E[RAND rot OP C ] K
+// TEMP = E[RAND XOR OP C ] K
 	int i;
 	u8 temp_m[16];
 
