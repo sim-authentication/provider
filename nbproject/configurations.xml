@@ -13,8 +13,8 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>main.c</itemPath>
-      <itemPath>rijandael.c</itemPath>
       <itemPath>milenage.c</itemPath>
+      <itemPath>rijandael.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -40,9 +40,9 @@
       </compileType>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="rijandael.c" ex="false" tool="0" flavor2="0">
-      </item>
       <item path="milenage.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="rijandael.c" ex="false" tool="0" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -67,9 +67,9 @@
       </compileType>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="rijandael.c" ex="false" tool="0" flavor2="0">
-      </item>
       <item path="milenage.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="rijandael.c" ex="false" tool="0" flavor2="0">
       </item>
     </conf>
   </confs>
