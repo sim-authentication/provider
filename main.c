@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef u_int8_t u8;
+typedef unsigned char u8;
 
 void rotWord(u8*, int);
 

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "rijndael.h"
 
-typedef u_int8_t u8;
+typedef unsigned char u8;
 
 void f1star();
 void in1();
