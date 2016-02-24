@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
     in1();
 
     // teste temp()
-    genTemp();
+    genTemp(keyArr);
 
     return (EXIT_SUCCESS);
 }

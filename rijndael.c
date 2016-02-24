@@ -85,14 +85,11 @@ void encrypt(u8 input[16], u8 keyStr[16], u8 output[16]) {
     shiftRow();
     addRoundKey(r);
     
-    printf("Cipher key: ");
     for (j = 0; j < 4; j++) {
         for(i = 0; i < 4; i++) {
             output[(j*4 + i)] = state[i][j];
-            printf("%x", state[i][j]);
         }
     }
-    printf("\r\n");
 }
 
 u8 getSboxValue(int num) {

@@ -37,7 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/milenage.o \
-	${OBJECTDIR}/rijandael.o
+	${OBJECTDIR}/rijndael.o
 
 
 # C Compiler Flags
@@ -74,10 +74,10 @@ ${OBJECTDIR}/milenage.o: milenage.c
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/milenage.o milenage.c
 
-${OBJECTDIR}/rijandael.o: rijandael.c 
+${OBJECTDIR}/rijndael.o: rijndael.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/rijandael.o rijandael.c
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/rijndael.o rijndael.c
 
 # Subprojects
 .build-subprojects:
