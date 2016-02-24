@@ -11,12 +11,11 @@
 
 typedef u_int8_t u8;
 
+void rotWord(u8*, int);
+
 u8 inputArr[16], keyArr[16], outputArr[16];
 int i;
 
-/*
- * 
- */
 int main(int argc, char** argv) {
     char* keyStr = "2b7e151628aed2a6abf7158809cf4f3c";
     char* inputStr = "6bc1bee22e409f96e93d7e117393172a";
@@ -32,13 +31,29 @@ int main(int argc, char** argv) {
     free(temp);
 
     encrypt(inputArr, keyArr, outputArr);
-        
+
     // teste in1()
     in1();
 
     // teste temp()
     temp_m();
-    
+
     return (EXIT_SUCCESS);
 }
 
+void rotWord(u8 array[], int size) {
+    u8* temp;
+    temp = malloc(1);
+    *temp = array[0];
+
+    // RotWord
+    for (i = 0; i < size; i++) {
+        if (i < (size - 1)) {
+            array[i] = array[i + 1];
+        } else {
+            array[i] = *temp;
+        }
+    }
+    
+    free(temp);
+}
