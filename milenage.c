@@ -34,14 +34,14 @@ void in1() {
 
     for (i = 0; i < 6; i++) {
         sqn[i] = i;
-        printf("%x", sqn[i]);
+        printf("%hhx", sqn[i]);
     }
 
     printf("\n");
     printf("DUMMY_AMF: ");
     for (i = 6; i < 8; i++) {
         amf[i] = i;
-        printf("%x", amf[i]);
+        printf("%hhx", amf[i]);
     }
 
     // create IN1
@@ -58,7 +58,7 @@ void in1() {
     printf("\n");
     printf("IN1: ");
     for (i = 0; i < 16; i++) {
-        printf("%x", in1[i]);
+        printf("%hhx", in1[i]);
     }
 }
 
@@ -80,12 +80,12 @@ void genTemp(u8* keyArr) {
     printf("\n");
     printf("DUMMY_RAND: ");
     for (i = 0; i < 16; i++) {
-        printf("%2x", dummy_rand[i]);
+        printf("%hhx", dummy_rand[i]);
     }
     printf("\n");
     printf("OPc: ");
     for (i = 0; i < 16; i++) {
-        printf("%2x", opc[i]);
+        printf("%hhx", opc[i]);
     }
 
     for (i = 0; i < 16; i++) {
@@ -95,7 +95,7 @@ void genTemp(u8* keyArr) {
 
     printf("\r\nTEMP: ");
     for (i = 0; i < 16; i++) {
-        printf("%2x", output[i]);
+        printf("%hhx", output[i]);
     }
 
 }
