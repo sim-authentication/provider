@@ -1,13 +1,23 @@
-#include <stdio.h>
+/* 
+ * File:   rijandael.c
+ * Author: Marco Heumann
+ *
+ * Created on 29. Januar 2016
+ */
 
-unsigned int t2(unsigned int);
-unsigned int getSboxValue(unsigned int);
-void addRoundKey(unsigned int);
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef u_int8_t u8;
+
+int t2(int);
+u8 getSboxValue(int);
+void addRoundKey(int);
 void generateRoundKey();
 void shiftRow();
 void mixColumn();
 
-static const unsigned int Sbox[256] = {
+static const u8 Sbox[256] = {
     0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
     0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0,
     0xB7, 0xFD, 0x93, 0x26, 0x36, 0x3F, 0xF7, 0xCC, 0x34, 0xA5, 0xE5, 0xF1, 0x71, 0xD8, 0x31, 0x15,
@@ -26,30 +36,30 @@ static const unsigned int Sbox[256] = {
     0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16
 };
 /* Round constants */
-static const unsigned int Rcon[10] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36};
-unsigned int mixMatrix[4][4] = {
+static const u8 Rcon[10] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36};
+u8 mixMatrix[4][4] = {
     {0x02, 0x03, 0x01, 0x01},
     {0x01, 0x02, 0x03, 0x01},
     {0x01, 0x01, 0x02, 0x03},
     {0x03, 0x01, 0x01, 0x02}
 };
-unsigned int key[4][4] = {
-    {0xc9, 0x16, 0x9e, 0x79},
-    {0x7a, 0xce, 0x09, 0x38},
-    {0x97, 0x88, 0x8c, 0xd4},
-    {0xb3, 0xed, 0x96, 0xc6}
-};
-unsigned int roundKey[11][4][4];
-unsigned int state[4][4] = {
-    {0x37, 0x36, 0xe4, 0x98},
-    {0xcf, 0xa5, 0xd2, 0x53},
-    {0x5f, 0xe5, 0x7b, 0x80},
-    {0xbe, 0xcc, 0x31, 0x04}
-};
-unsigned int temp[4] = {0, 0, 0, 0};
-unsigned int i, j, k, r, z;
+u8 temp[4] = {0, 0, 0, 0};
 
-void encrypt(char* output) {
+u8 key[4][4], roundKey[11][4][4], state[4][4];
+u8 i, j, k, r, z;
+
+void convert2array(u8 input[16], u8 output[4][4]) {
+    for (j = 0; j < 4; j++) {
+        for(i = 0; i < 4; i++) {
+            output[i][j] = input[(j*4 + i)];
+        }
+    }
+}
+
+void encrypt(u8 input[16], u8 keyStr[16], u8 output[16]) {
+    convert2array(input, state);
+    convert2array(keyStr, key);
+    
     // Round 0
     generateRoundKey();
     addRoundKey(0);
@@ -74,26 +84,20 @@ void encrypt(char* output) {
     }
     shiftRow();
     addRoundKey(r);
+    
     for (j = 0; j < 4; j++) {
         for(i = 0; i < 4; i++) {
+            output[(j*4 + i)] = state[i][j];
             printf("%x", state[i][j]);
         }
     }
 }
 
-void convert2array(char* string) {
-    for (j = 0; j < 4; j++) {
-        for(i = 0; i < 4; i++) {
-            //TODO tbd
-        }
-    }
-}
-
-unsigned int getSboxValue(unsigned int num) {
+u8 getSboxValue(int num) {
     return Sbox[num];
 }
 
-unsigned int getRconValue(unsigned int num) {
+u8 getRconValue(int num) {
     return Rcon[num];
 }
 
@@ -143,7 +147,7 @@ void mixColumn() {
     }
 }
 
-void addRoundKey(unsigned int round) {
+void addRoundKey(int round) {
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 4; j++) {
             state[i][j] ^= roundKey[round][i][j];
@@ -190,7 +194,7 @@ void generateRoundKey() {
     }
 }
 
-unsigned int t2(unsigned int a) {
+int t2(int a) {
     if (a < 128) {
         return 2 * a;
     } else if (a >= 128) {
