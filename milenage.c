@@ -77,15 +77,13 @@ void genTemp(u8* keyArr) {
     }
 
     // print dummy RAND
-    printf("\n");
-    printf("DUMMY_RAND: ");
+    printf("\nDUMMY_RAND: ");
     for (i = 0; i < 16; i++) {
-        printf("%2x", dummy_rand[i]);
+        printf("%x", dummy_rand[i]);
     }
-    printf("\n");
-    printf("OPc: ");
+    printf("\nOPc: ");
     for (i = 0; i < 16; i++) {
-        printf("%2x", opc[i]);
+        printf("%x", opc[i]);
     }
 
     for (i = 0; i < 16; i++) {
