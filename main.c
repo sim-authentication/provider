@@ -2,7 +2,7 @@
  * File:   main.c
  * Author: Marco Heumann
  *
- * Created on 29. Januar 2016, 20:43
+ * Created on 29. Januar 2016
  */
 
 #include <stdio.h>
@@ -12,7 +12,6 @@
 typedef u_int8_t u8;
 
 u8 inputArr[16], keyArr[16], outputArr[16];
-u8 test[4][4];
 int i;
 
 /*

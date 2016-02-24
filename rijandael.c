@@ -1,3 +1,10 @@
+/* 
+ * File:   rijandael.c
+ * Author: Marco Heumann
+ *
+ * Created on 29. Januar 2016
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
