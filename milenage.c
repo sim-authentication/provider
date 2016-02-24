@@ -5,7 +5,7 @@ typedef u_int8_t u8;
 
 void f1star();
 void in1();
-void temp_m();
+void genTemp();
 
 void f1star(){
 }
@@ -59,21 +59,42 @@ void in1(){
 	}
 }
 
-void temp_m() {
+void genTemp() {
 // TEMP is a 128-bit value used within the computation of the functions.
-// TEMP = E[RAND XOR OP C ] K
+// TEMP = E[RAND XOR OP C ] K (while K is keysting)
 	int i;
-	u8 temp_m[16];
+	u8 dummy_rand[16];
+	u8 dummy_opc[16];
+	u8 dummy_k[16];
+	u8 toEncrypt[16];
+	u8 output[16];
 
 	// generate dummy RAND
 	for (i=0; i<16; i++) {
-		temp_m[i]=i;
+		dummy_rand[i]=i;
+		dummy_opc[i]=i;
 	}
 
 	// print dummy RAND
 	printf("\n");
 	printf("DUMMY_RAND: ");
 	for (i=0; i<16; i++) {
-		printf("%x",temp_m[i]);
+		printf("%2x",dummy_rand[i]);
 	}
+	printf("\n");
+	printf("DUMMY_OPc: ");
+	for (i=0; i<16; i++) {
+		printf("%2x",dummy_opc[i]);
+	}
+
+	// for (i=0; i<16; i++) {
+	// 	toEncrypt[i] = dummy_rand[i] ^ dummy_opc[i];
+	// 	encrypt( toEncrypt, keyArr, output);
+	// }
+
+	// printf("TEMP: ");
+	// for (i=0; i<16; i++) {
+	// 	printf("%2x",output[i]);
+	// }
+
 }

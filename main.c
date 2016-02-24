@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
     in1();
 
     // teste temp()
-    temp_m();
+    genTemp();
 
     return (EXIT_SUCCESS);
 }
