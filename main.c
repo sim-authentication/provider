@@ -32,11 +32,8 @@ int main(int argc, char** argv) {
 
     encrypt(inputArr, keyArr, outputArr);
 
-    // teste in1()
-    in1();
-
-    // teste temp()
-    genTemp(keyArr);
+    // teste f1()
+    f1(keyArr);
 
     return (EXIT_SUCCESS);
 }
