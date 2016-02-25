@@ -9,6 +9,11 @@ void in1();
 void genTemp(u8*);
 
 u8 opc[16] = {0x25, 0x50, 0x07, 0x6C, 0x5E, 0xF5, 0x9F, 0x77, 0xEE, 0xBE, 0xF1, 0xCA, 0x39, 0x91, 0x6E, 0xC8};
+u8 output[16];
+u8 c2[16] = {0x7C, 0x1E, 0xE3, 0x6E, 0x98, 0xC2, 0x74, 0x40, 0xCA, 0x1D, 0x58, 0xF7, 0xE8, 0xD3, 0x7D, 0x2F};
+
+u8 res[8], ak[6];
+int i;
 
 void f1star() {
 }
@@ -25,9 +30,9 @@ void in1() {
 
     // dummy values for SQN and AMF
     int i;
+    u8 in1[16];
     u8 sqn[6];
     u8 amf[2];
-    u8 in1[16];
 
     printf("\n");
     printf("DUMMY_SQN: ");
@@ -69,7 +74,6 @@ void genTemp(u8* keyArr) {
     u8 dummy_rand[16];
     u8 dummy_k[16];
     u8 toEncrypt[16];
-    u8 output[16];
 
     // generate dummy RAND
     for (i = 0; i < 16; i++) {
@@ -97,5 +101,34 @@ void genTemp(u8* keyArr) {
     for (i = 0; i < 16; i++) {
         printf("%hhx", output[i]);
     }
+}
 
+void f2_5(u8* keyArr) {
+    u8* out2;
+    out2 = malloc(16);
+    
+    for (i = 0; i < 16; i++) {
+        out2[i] = output[i] ^ opc[i];
+    }
+    rotWord(out2, 16, 0x3a);
+    
+    for (i = 0; i < 16; i++) {
+        out2[i] ^= c2[i];
+    }
+    encrypt(out2, keyArr, out2);
+    
+    for (i = 0; i < 16; i++) {
+        out2[i] ^= opc[i];
+    }
+    
+    printf("\r\nAK: ");
+    for (i = 0; i < 6; i++) {
+        ak[i] = out2[i];
+        printf("%hhx", ak[i]);
+    }
+    printf("\r\nRES: ");
+    for (i = 7; i < 16; i++) {
+        res[i-7] = out2[i];
+        printf("%hhx", res[i-7]);
+    }
 }
