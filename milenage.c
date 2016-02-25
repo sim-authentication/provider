@@ -27,6 +27,11 @@ void f1(u8* keyArr) {
     // IN1[48] .. IN1[63] = AMF[0] .. AMF[15]
     // IN1[64] .. IN1[111] = SQN[0] .. SQN[47]
     // IN1[112] .. IN1[127] = AMF[0] .. AMF[15]
+    //
+    // TEMP is a 128-bit value used within the computation of the functions.
+    // TEMP = E[RAND XOR OP C ] K (while K is keysting)
+    // OUT1 = E[TEMP XOR rot(IN1 XOR OPc , r1) XOR c1]k XOR OPc
+    // r1=1F, r2= 3A, r3=01, r4=3F, r5=08
 
     // dummy values for SQN and AMF
     int i;
@@ -36,19 +41,21 @@ void f1(u8* keyArr) {
     u8 dummy_rand[16];
     u8 dummy_k[16];
     u8 toEncrypt[16];
-    u8 output[16];
+    u8 temp[16];
+    u8* out1;
+    out1 = malloc(16);
 
     printf("\nDUMMY_SQN: ");
 
     for (i = 0; i < 6; i++) {
         sqn[i] = i;
-        printf("%x", sqn[i]);
+        printf("%hhx", sqn[i]);
     }
 
     printf("\nDUMMY_AMF: ");
     for (i = 6; i < 8; i++) {
         amf[i] = i;
-        printf("%x", amf[i]);
+        printf("%hhx", amf[i]);
     }
 
     // create IN1
@@ -64,7 +71,7 @@ void f1(u8* keyArr) {
     // print IN1
     printf("\nIN1: ");
     for (i = 0; i < 16; i++) {
-        printf("%x", in1[i]);
+        printf("%hhx", in1[i]);
     }
 
     // generate dummy RAND
@@ -75,30 +82,57 @@ void f1(u8* keyArr) {
     // print dummy RAND
     printf("\nDUMMY_RAND: ");
     for (i = 0; i < 16; i++) {
-        printf("%x", dummy_rand[i]);
+        printf("%hhx", dummy_rand[i]);
     }
     printf("\nOPc: ");
     for (i = 0; i < 16; i++) {
-        printf("%x", opc[i]);
+        printf("%hhx", opc[i]);
     }
 
     for (i = 0; i < 16; i++) {
         toEncrypt[i] = dummy_rand[i] ^ opc[i];
-        encrypt(toEncrypt, keyArr, output);
+        encrypt(toEncrypt, keyArr, temp);
     }
 
     printf("\r\nTEMP: ");
     for (i = 0; i < 16; i++) {
-        printf("%2x", output[i]);
+        printf("%hhx", temp[i]);
     }
-}
 
-void genTemp(u8* keyArr) {
-    // TEMP is a 128-bit value used within the computation of the functions.
-    // TEMP = E[RAND XOR OP C ] K (while K is keysting)
-    int i;
+    // generate most inner value for calculation of out1
+    // TEMP XOR rot(IN1 XOR OPc , r1) XOR c1
+    // r1=1F, r2= 3A, r3=01, r4=3F, r5=08
+    for (i = 0; i < 16; i++) {
+        out1[i] =  in1[i]^opc[i];
+    }
+    printf("\ninnvervalue: ");
+    for (i = 0; i < 16; i++) {
+        printf("%hhx", out1[i]);
+    }
+    rotWord(out1, 32, 0x1F);
+    printf("\nrotatedvalue: ");
+    for (i = 0; i < 16; i++) {
+        printf("%hhx", out1[i]);
+    }
+    for (i = 0; i < 16; i++) {
+        out1[i] = temp[i]^out1[i]^c1[i];
+    }
+    printf("\nxoredvalue: ");
+    for (i = 0; i < 16; i++) {
+        printf("%hhx", out1[i]);
+    }
 
+    // encrypt generated values
+    encrypt(out1, keyArr, out1);
 
+    // XOR with OPc
+    for (i = 0; i < 16; i++) {
+        out1[i] ^= opc[i];
+    }
 
-
+    // test output for out1
+    printf("\nOUT1: ");
+    for (i = 0; i < 16; i++) {
+        printf("%hhx", out1[i]);
+    }
 }

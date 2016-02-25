@@ -11,7 +11,7 @@
 
 typedef u_int8_t u8;
 
-void rotWord(u8*, int);
+void rotWord(u8*, int, int);
 
 u8 inputArr[16], keyArr[16], outputArr[16];
 int i;
@@ -38,19 +38,19 @@ int main(int argc, char** argv) {
     return (EXIT_SUCCESS);
 }
 
-void rotWord(u8 array[], int size) {
-    u8* temp;
-    temp = malloc(1);
-    *temp = array[0];
-
-    // RotWord
-    for (i = 0; i < size; i++) {
-        if (i < (size - 1)) {
-            array[i] = array[i + 1];
-        } else {
-            array[i] = *temp;
-        }
+void reverse(u8* a, int sz) {
+    int i, j;
+    for (i = 0, j = sz; i < j; i++, j--) {
+        int tmp = a[i];
+        a[i] = a[j];
+        a[j] = tmp;
     }
-    
-    free(temp);
+}
+
+void rotWord(u8* array, int size, int amt) {
+    if (amt < 0)
+        amt = size + amt;
+    reverse(array, size - amt - 1);
+    reverse(array + size - amt, amt - 1);
+    reverse(array, size - 1);
 }
