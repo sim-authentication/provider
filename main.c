@@ -12,6 +12,7 @@
 typedef u_int8_t u8;
 
 void rotWord(u8*, int, int);
+void convertToBin(u8*, u8*);
 
 u8 inputArr[16], keyArr[16], outputArr[16];
 int i;
