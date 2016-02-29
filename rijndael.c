@@ -50,8 +50,8 @@ u8 i, j, k, r, z;
 
 void convert2array(u8 input[16], u8 output[4][4]) {
     for (j = 0; j < 4; j++) {
-        for(i = 0; i < 4; i++) {
-            output[i][j] = input[(j*4 + i)];
+        for (i = 0; i < 4; i++) {
+            output[i][j] = input[(j * 4 + i)];
         }
     }
 }
@@ -59,7 +59,7 @@ void convert2array(u8 input[16], u8 output[4][4]) {
 void encrypt(u8 input[16], u8 keyStr[16], u8 output[16]) {
     convert2array(input, state);
     convert2array(keyStr, key);
-    
+
     // Round 0
     generateRoundKey();
     addRoundKey(0);
@@ -84,10 +84,10 @@ void encrypt(u8 input[16], u8 keyStr[16], u8 output[16]) {
     }
     shiftRow();
     addRoundKey(r);
-    
+
     for (j = 0; j < 4; j++) {
-        for(i = 0; i < 4; i++) {
-            output[(j*4 + i)] = state[i][j];
+        for (i = 0; i < 4; i++) {
+            output[(j * 4 + i)] = state[i][j];
         }
     }
 }
@@ -166,7 +166,7 @@ void generateRoundKey() {
         // RotWord
         for (i = 0; i < 4; i++) {
             if (i < 3) {
-                roundKey[k][i][0] = roundKey[k - 1][i+1][3];
+                roundKey[k][i][0] = roundKey[k - 1][i + 1][3];
             } else {
                 roundKey[k][i][0] = temp[0];
             }

@@ -4,7 +4,6 @@
  *
  * Created on 24. Februar 2016
  */
-#include <stdio.h>
 
 #ifndef RIJNDAEL_H
 #define RIJNDAEL_H

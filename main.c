@@ -36,6 +36,9 @@ int main(int argc, char** argv) {
     // teste f1()
     f1(keyArr);
 
+    //test f2_5()
+    f2_5(keyArr);
+
     return (EXIT_SUCCESS);
 }
 
@@ -51,5 +54,7 @@ void reverse(u8* a, int sz) {
 void rotWord(u8* array, int size, int amt) {
     reverse(array, amt - 1);
     reverse(array + amt, size - amt - 1);
+    reverse(array, size - 1);
+    reverse(array + size - amt, amt - 1);
     reverse(array, size - 1);
 }

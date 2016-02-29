@@ -40,7 +40,6 @@ void f1(u8* keyArr) {
     int i,j;
     u8 sqn[6]={ 0x00, 0x01, 0x02, 0x03, 0x04, 0x05 };
     u8 amf[2]={ 0x06, 0x07 };
-    u8 in1[16];
     u8 dummy_rand[16];
     u8 dummy_k[16];
     u8 toEncrypt[16];
@@ -141,6 +140,36 @@ void f1(u8* keyArr) {
     printf("\nOUT1: ");
     for (i = 0; i < 16; i++) {
         printf("%hhx", out1[i]);
+    }
+}
+
+void f2_5(u8* keyArr) {
+    u8* out2;
+    out2 = malloc(16);
+    
+    for (i = 0; i < 16; i++) {
+        out2[i] = output[i] ^ opc[i];
+    }
+    rotWord(out2, 16, 0x3a);
+    
+    for (i = 0; i < 16; i++) {
+        out2[i] ^= c2[i];
+    }
+    encrypt(out2, keyArr, out2);
+    
+    for (i = 0; i < 16; i++) {
+        out2[i] ^= opc[i];
+    }
+    
+    printf("\r\nAK: ");
+    for (i = 0; i < 6; i++) {
+        ak[i] = out2[i];
+        printf("%hhx", ak[i]);
+    }
+    printf("\r\nRES: ");
+    for (i = 7; i < 16; i++) {
+        res[i-7] = out2[i];
+        printf("%hhx", res[i-7]);
     }
 }
 
