@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "rijndael.h"
 
-typedef u_int8_t u8;
+typedef unsigned char u8;
 
 void f1star();
 void in1();
@@ -61,8 +61,7 @@ void f1(u8* keyArr) {
 
     // create IN1
     for (i=0; i<6; i++) {
-        in1[i]
-        = sqn[i];
+        in1[i] = sqn[i];
         in1[i+8] = sqn[i];
     }
     for (i=0; i<2; i++){
@@ -109,7 +108,12 @@ void f1(u8* keyArr) {
     }
 
     convertToBin(out1, binArr);
-    rotWord(binArr, 128, 0x80); // replace with correct r1-value later
+    rotWord(binArr, 128, 0x05); // replace with correct r1-value later
+    
+    printf("\nrotated Bits: ");
+    for (i=0; i<128; i++){
+        printf("%hhx", binArr[i]);
+    }
     convertToHex(binArr, out1);
 
     printf("\nrotatedvalue: ");
@@ -134,24 +138,20 @@ void f1(u8* keyArr) {
     }
 
     // test output for out1
-    printf("\nOUT1:        ");
+    printf("\nOUT1: ");
     for (i = 0; i < 16; i++) {
         printf("%hhx", out1[i]);
     }
 }
 
 void convertToBin(u8* hexArr, u8* binArr) {
-    int i,j,k;
-    unsigned char byte;
+    int i,j;
     unsigned char mask = 1;
-
-    k=7; // k starts for each octet at the most significant bit
+    
     for (j=0; j<16; j++){
         for (i = 0; i < 8; i++) {
-            binArr[k] = (hexArr[j] & (mask << i)) != 0;
-            k=k-1;
+            binArr[j*8 + i] = (hexArr[j] & (mask << (7-i))) != 0;
         }
-        k=k+16;
     }
     printf("\narr converted: ");
     for (i=0; i<128; i++){

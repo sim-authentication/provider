@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef u_int8_t u8;
+typedef unsigned char u8;
 
 int t2(int);
 u8 getSboxValue(int);

@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef u_int8_t u8;
+typedef unsigned char u8;
 
 void rotWord(u8*, int, int);
 void convertToBin(u8*, u8*);
@@ -49,9 +49,7 @@ void reverse(u8* a, int sz) {
 }
 
 void rotWord(u8* array, int size, int amt) {
-    if (amt < 0)
-        amt = size + amt;
-    reverse(array, size - amt - 1);
-    reverse(array + size - amt, amt - 1);
+    reverse(array, amt - 1);
+    reverse(array + amt, size - amt - 1);
     reverse(array, size - 1);
 }
