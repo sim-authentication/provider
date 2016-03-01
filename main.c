@@ -14,7 +14,7 @@ typedef unsigned char u8;
 void rotWord(u8*, int, int);
 void convertToBin(u8*, u8*);
 
-u8 inputArr[16], keyArr[16], outputArr[16];
+u8 inputArr[16], keyArr[16], outputArr[16], mrand[16];
 int i;
 
 int main(int argc, char** argv) {
@@ -34,7 +34,8 @@ int main(int argc, char** argv) {
     encrypt(inputArr, keyArr, outputArr);
 
     // teste f1()
-    f1(keyArr);
+    genRand(mrand);
+    f1(keyArr, mrand);
 
     //test f2_5()
     f2_5(keyArr);

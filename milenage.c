@@ -6,9 +6,10 @@ typedef unsigned char u8;
 
 void f1star();
 void in1();
-void f1(u8*);
+void f1(u8*, u8*);
 void convertToBin(u8*, u8*);
 void convertToHex(u8*, u8*);
+void genRand(u8*);
 
 u8 opc[16] = {0x25, 0x50, 0x07, 0x6C, 0x5E, 0xF5, 0x9F, 0x77, 0xEE, 0xBE, 0xF1, 0xCA, 0x39, 0x91, 0x6E, 0xC8};
 u8 c1[16] = {0x7C, 0x1E, 0xE3, 0x6E, 0x98, 0xC2, 0x74, 0x40, 0xCA, 0x1D, 0x58, 0xF7, 0xE8, 0xD3, 0x7D, 0x2F};
@@ -23,7 +24,7 @@ int i;
 void f1star() {
 }
 
-void f1(u8* keyArr) {
+void f1(u8* keyArr, u8* mrand) {
     // a 128-bit value constructed from SQN and AMF and used in the computation of the functions f1
     // and f1*.
     // 
@@ -74,15 +75,10 @@ void f1(u8* keyArr) {
         printf("%hhx", in1[i]);
     }
 
-    // generate dummy RAND
-    for (i = 0; i < 16; i++) {
-        dummy_rand[i] = i;
-    }
-
     // print dummy RAND
-    printf("\nDUMMY_RAND: ");
+    printf("\nRAND: ");
     for (i = 0; i < 16; i++) {
-        printf("%hhx", dummy_rand[i]);
+        printf("%hhx", mrand[i]);
     }
     printf("\nOPc: ");
     for (i = 0; i < 16; i++) {
@@ -90,7 +86,7 @@ void f1(u8* keyArr) {
     }
 
     for (i = 0; i < 16; i++) {
-        toEncrypt[i] = dummy_rand[i] ^ opc[i];
+        toEncrypt[i] = mrand[i] ^ opc[i];
     }
     encrypt(toEncrypt, keyArr, temp);
     
@@ -183,5 +179,14 @@ void convertToHex(u8* binArr, u8* hexArr) {
         }
         j = 1;
         hexArr[arrpos] = temp;
+    }
+}
+
+void genRand(u8* mrand) {
+    int i;
+    time_t t;
+    srand((unsigned) time(&t));
+    for(i = 0;i<16;i++) {
+        mrand[i]=rand()%16;
     }
 }
