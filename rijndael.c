@@ -46,7 +46,7 @@ u8 mixMatrix[4][4] = {
 u8 temp[4] = {0, 0, 0, 0};
 
 u8 key[4][4], roundKey[11][4][4], state[4][4];
-u8 i, j, k, r, z;
+int i, j, k, r, z;
 
 void convert2array(u8 input[16], u8 output[4][4]) {
     for (j = 0; j < 4; j++) {
@@ -88,6 +88,11 @@ void encrypt(u8 input[16], u8 keyStr[16], u8 output[16]) {
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
             output[(j * 4 + i)] = state[i][j];
+            
+            printf("\nRij Key (K) in Schleife bei i = %d, j = %d: ", i, j);
+            for (k = 0; k < 16; k++) {
+                printf("%hhx", keyStr[k]);
+            }
         }
     }
 }

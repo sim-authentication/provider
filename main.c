@@ -14,27 +14,21 @@ typedef unsigned char u8;
 void rotWord(u8*, int, int);
 void convertToBin(u8*, u8*);
 
-u8 inputArr[16], keyArr[16], outputArr[16], mrand[16];
+u8 inputArr[16], keyArr[16], outputArr[16];
+u8 mrand[16] = {0x23, 0x55, 0x3c, 0xbe, 0x96, 0x37, 0xa8, 0x9d, 0x21, 0x8a, 0xe6, 0x4d, 0xae, 0x47, 0xbf, 0x35};
 int i;
 
 int main(int argc, char** argv) {
-    char* keyStr = "2b7e151628aed2a6abf7158809cf4f3c";
-    char* inputStr = "6bc1bee22e409f96e93d7e117393172a";
+    char* stat_key = "465b5ce8b199b49faa5f0a2ee238a6bc";
     char* temp;
     temp = malloc(3);
     for (i = 0; i < 16; i++) {
-        strncpy(temp, &keyStr[i * 2], 2);
+        strncpy(temp, &stat_key[i * 2], 2);
         keyArr[i] = strtol(temp, NULL, 16);
-
-        strncpy(temp, &inputStr[i * 2], 2);
-        inputArr[i] = strtol(temp, NULL, 16);
     }
     free(temp);
 
-    encrypt(inputArr, keyArr, outputArr);
-
-    // teste f1()
-    genRand(mrand);
+    //genRand(mrand);
     f1(keyArr, mrand);
 
     //test f2_5()
@@ -55,7 +49,5 @@ void reverse(u8* a, int sz) {
 void rotWord(u8* array, int size, int amt) {
     reverse(array, amt - 1);
     reverse(array + amt, size - amt - 1);
-    reverse(array, size - 1);
-    reverse(array + size - amt, amt - 1);
     reverse(array, size - 1);
 }
