@@ -88,11 +88,6 @@ void encrypt(u8 input[16], u8 keyStr[16], u8 output[16]) {
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
             output[(j * 4 + i)] = state[i][j];
-            
-            printf("\nRij Key (K) in Schleife bei i = %d, j = %d: ", i, j);
-            for (k = 0; k < 16; k++) {
-                printf("%hhx", keyStr[k]);
-            }
         }
     }
 }
