@@ -14,26 +14,23 @@ typedef unsigned char u8;
 void rotWord(u8*, int, int);
 void convertToBin(u8*, u8*);
 
-u8 inputArr[16], keyArr[16], outputArr[16];
-u8 mrand[16] = {0x23, 0x55, 0x3c, 0xbe, 0x96, 0x37, 0xa8, 0x9d, 0x21, 0x8a, 0xe6, 0x4d, 0xae, 0x47, 0xbf, 0x35};
+u8 inputArr[16], outputArr[16];
+u8 mrand[16];// = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef, 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
+u8 keyArr[16] = {0x14, 0x5D, 0xD6, 0x1C, 0xE1, 0xF1, 0x9B, 0x84, 0x96, 0x3C, 0x09, 0x8C, 0x84, 0xDF, 0x1B, 0x98};
 int i;
 
-int main(int argc, char** argv) {
-    char* stat_key = "465b5ce8b199b49faa5f0a2ee238a6bc";
-    char* temp;
-    temp = malloc(3);
+int main(int argc, char** argv) {    
+    printf("KEY: ");
     for (i = 0; i < 16; i++) {
-        strncpy(temp, &stat_key[i * 2], 2);
-        keyArr[i] = strtol(temp, NULL, 16);
+        printf("%02x", keyArr[i]);
     }
-    free(temp);
 
-    //genRand(mrand);
+    genRand(mrand);
     f1(keyArr, mrand);
-
-    //test f2_5()
     f2_5(keyArr);
-
+    genAutn();
+    
+    printf("\n\n");
     return (EXIT_SUCCESS);
 }
 

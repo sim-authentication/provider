@@ -43,7 +43,7 @@ u8 mixMatrix[4][4] = {
     {0x01, 0x01, 0x02, 0x03},
     {0x03, 0x01, 0x01, 0x02}
 };
-u8 temp[4] = {0, 0, 0, 0};
+u8 tmp[4] = {0, 0, 0, 0};
 
 u8 key[4][4], roundKey[11][4][4], state[4][4];
 int i, j, k, r, z;
@@ -103,10 +103,10 @@ u8 getRconValue(int num) {
 void shiftRow() {
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 4; j++) {
-            temp[j] = state[i][j];
+            tmp[j] = state[i][j];
         }
         for (j = 0; j < 4; j++) {
-            state[i][j] = temp[(j + i) % 4];
+            state[i][j] = tmp[(j + i) % 4];
         }
     }
 }
@@ -114,31 +114,31 @@ void shiftRow() {
 void mixColumn() {
     for (j = 0; j < 4; j++) {
         for (i = 0; i < 4; i++) {
-            temp[i] = state[i][j];
+            tmp[i] = state[i][j];
         }
         for (i = 0; i < 4; i++) {
             for (z = 0; z < 4; z++) {
                 switch (mixMatrix[i][z]) {
                     case 3:
                         if (z == 0) {
-                            state[i][j] = t2(temp[z]) ^ temp[z];
+                            state[i][j] = t2(tmp[z]) ^ tmp[z];
                         } else {
-                            state[i][j] ^= t2(temp[z]) ^ temp[z];
+                            state[i][j] ^= t2(tmp[z]) ^ tmp[z];
                         }
                         break;
                     case 2:
                         if (z == 0) {
-                            state[i][j] = t2(temp[z]);
+                            state[i][j] = t2(tmp[z]);
                         } else {
-                            state[i][j] ^= t2(temp[z]);
+                            state[i][j] ^= t2(tmp[z]);
                         }
                         break;
                     case 1:
                     default:
                         if (z == 0) {
-                            state[i][j] = temp[z];
+                            state[i][j] = tmp[z];
                         } else {
-                            state[i][j] ^= temp[z];
+                            state[i][j] ^= tmp[z];
                         }
                 }
             }
@@ -161,14 +161,14 @@ void generateRoundKey() {
         }
     }
     for (k = 1; k < 11; k++) {
-        temp[0] = roundKey[k - 1][0][3];
+        tmp[0] = roundKey[k - 1][0][3];
 
         // RotWord
         for (i = 0; i < 4; i++) {
             if (i < 3) {
                 roundKey[k][i][0] = roundKey[k - 1][i + 1][3];
             } else {
-                roundKey[k][i][0] = temp[0];
+                roundKey[k][i][0] = tmp[0];
             }
         }
 
