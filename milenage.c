@@ -88,6 +88,11 @@ void f1(u8* keyArr, u8* mrand) {
     for (i = 0; i < 8; i++) {
         printf("%02x", out1[i]);
     }
+
+    printf("\nMAC-S: ");
+    for (i = 8; i < 16; i++) {
+        printf("%02x", out1[i]);
+    }
 }
 
 void f2_5(u8* keyArr) {
