@@ -95,7 +95,7 @@ void f1(u8* keyArr, u8* mrand) {
     }
 }
 
-void f2_5(u8* keyArr) {
+void f2_5(u8* keyArr, u8* response_arr) {
     u8* out2;
     out2 = malloc(16);
 
@@ -123,8 +123,42 @@ void f2_5(u8* keyArr) {
     }
     printf("\r\nRES: ");
     for (i = 8; i < 16; i++) {
-        res[i - 8] = out2[i];
-        printf("%02x", res[i - 8]);
+        response_arr[i - 8] = out2[i];
+        printf("%02x", response_arr[i - 8]);
+    }
+}
+
+void f5star(u8* keyArr, u8* sqn_ak) {
+    u8* out5;
+    out5 = malloc(16);
+
+    for (i = 0; i < 16; i++) {
+        out5[i] = temp[i] ^ opc[i];
+    }
+    
+    convertToBin(out5, binArr);
+    rotWord(binArr, 128, 0x08);
+    convertToHex(binArr, out5);
+
+    for (i = 0; i < 16; i++) {
+        out5[i] ^= c5[i];
+    }
+    encrypt(out5, keyArr, out5);
+
+    for (i = 0; i < 16; i++) {
+        out5[i] ^= opc[i];
+    }
+
+    printf("\r\nAK (neu): ");
+    for (i = 0; i < 6; i++) {
+        ak[i] = out5[i];
+        printf("%02x", ak[i]);
+    }
+    
+    printf("\r\nSQN (neu): ");
+    for (i = 0; i < 6; i++) {
+        sqn[i] = ak[i] ^ sqn_ak[i];
+        printf("%02x", sqn[i]);
     }
 }
 
@@ -151,15 +185,18 @@ void convertToHex(u8* binArr, u8* hexArr) {
     }
 }
 
-void genAutn() {
+void genAutn(u8* response_arr) {
     printf("\nAUTN: ");
     for (i = 0; i < 6; i++) {
-        printf("%02x", sqn[i] ^ ak[i]);
+        response_arr[i] = sqn[i] ^ ak[i];
+        printf("%02x", response_arr[i]);
     }
     for (i = 0; i < 2; i++) {
+        response_arr[i + 6] = amf[i];
         printf("%02x", amf[i]);
     }
     for (i = 0; i < 8; i++) {
+        response_arr[i + 8] = out1[i];
         printf("%02x", out1[i]);
     }
 }
