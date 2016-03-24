@@ -67,28 +67,28 @@ int main(int argc, char** argv) {
         temp = malloc(2);
 
         strncpy(temp, &client_message[0], 1);
-        status = strtol(temp, NULL, 16);
+        status = strtol(temp, NULL, 10);
 
         strncpy(imsi, &client_message[1], 15);
         
-        response_message[0] = 2;
+        response_message[0] = 50;
 
         if (status == 1) {
             for (i = 8; i < 22; i++) {
                 strncpy(temp, &client_message[i * 2], 2);
-                auts[i] = strtol(temp, NULL, 16);
+                auts[i-8] = strtol(temp, NULL, 16);
             }
             
             //TODO: check MAC-S == XMAC-S
             f5star(keyArr, auts);
-            response_message[0] = 3;
+            response_message[0] = 51;
         }
         free(temp);
 
-        genRand(mrand, response_message[16]);
+        genRand(mrand, &response_message[16]);
         f1(keyArr, mrand);
-        f2_5(keyArr, response_message[72]);
-        genAutn(response_message[48]);
+        f2_5(keyArr, &response_message[72]);
+        genAutn(&response_message[48]);
         
         for(i = 0; i < 15; i++) {
             response_message[i+1] = imsi[i];

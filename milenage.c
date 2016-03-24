@@ -8,8 +8,8 @@ typedef unsigned char u8;
 void f1(u8*, u8*);
 void convertToBin(u8*, u8*);
 void convertToHex(u8*, u8*);
-void genRand(u8*);
-void genAutn();
+void genRand(u8*, u8*);
+void genAutn(u8*);
 
 u8 opc[16] = {0x25, 0x50, 0x07, 0x6C, 0x5E, 0xF5, 0x9F, 0x77, 0xEE, 0xBE, 0xF1, 0xCA, 0x39, 0x91, 0x6E, 0xC8};
 u8 c1[16] = {0x7C, 0x1E, 0xE3, 0x6E, 0x98, 0xC2, 0x74, 0x40, 0xCA, 0x1D, 0x58, 0xF7, 0xE8, 0xD3, 0x7D, 0x2F};
@@ -123,8 +123,8 @@ void f2_5(u8* keyArr, u8* response_arr) {
     }
     printf("\r\nRES: ");
     for (i = 8; i < 16; i++) {
-        response_arr[i - 8] = out2[i];
-        printf("%02x", response_arr[i - 8]);
+        sprintf(&response_arr[(i-8)*2], "%02x", out2[i]);
+        printf("%02x", out2[i]);
     }
 }
 
@@ -155,10 +155,10 @@ void f5star(u8* keyArr, u8* sqn_ak) {
         printf("%02x", ak[i]);
     }
     
-    printf("\r\nSQN (neu): ");
+    printf("\r\nAK xor SQN: ");
     for (i = 0; i < 6; i++) {
+        printf("%02x", sqn_ak[i]);
         sqn[i] = ak[i] ^ sqn_ak[i];
-        printf("%02x", sqn[i]);
     }
 }
 
@@ -188,23 +188,23 @@ void convertToHex(u8* binArr, u8* hexArr) {
 void genAutn(u8* response_arr) {
     printf("\nAUTN: ");
     for (i = 0; i < 6; i++) {
-        response_arr[i] = sqn[i] ^ ak[i];
-        printf("%02x", response_arr[i]);
+        sprintf(&response_arr[i*2], "%02x", (sqn[i] ^ ak[i]));
+        printf("%02x", (sqn[i] ^ ak[i]));
     }
     for (i = 0; i < 2; i++) {
-        response_arr[i + 6] = amf[i];
+        sprintf(&response_arr[(i+6)*2], "%02x", amf[i]);
         printf("%02x", amf[i]);
     }
     for (i = 0; i < 8; i++) {
-        response_arr[i + 8] = out1[i];
+        sprintf(&response_arr[(i+8)*2], "%02x", out1[i]);
         printf("%02x", out1[i]);
     }
 }
 
-void genRand(u8* mrand) {
-    time_t t;
-    srand((unsigned) time(&t));
+void genRand(u8* mrand, u8* response_arr) {
+    srand(time(NULL));
     for (i = 0; i < 16; i++) {
-        mrand[i] = rand() % 16;
+        mrand[i] = (unsigned)rand() % 255;
+        sprintf(&response_arr[i*2], "%02x", mrand[i]);
     }
 }
