@@ -66,22 +66,28 @@ int main(int argc, char** argv) {
         char* temp;
         temp = malloc(2);
 
+	printf("\n");
+	puts(client_message);
+	printf("\n");
+
         strncpy(temp, &client_message[0], 1);
         status = strtol(temp, NULL, 10);
 
         strncpy(imsi, &client_message[1], 15);
         
-        response_message[0] = 50;
+        response_message[0] = 50; // 50h -> 2d
 
-        if (status == 1) {
+        if (status == 3) {
+            printf("AUTS: ");
             for (i = 8; i < 22; i++) {
                 strncpy(temp, &client_message[i * 2], 2);
                 auts[i-8] = strtol(temp, NULL, 16);
+		printf("%02x",auts[i-8]);
             }
             
             //TODO: check MAC-S == XMAC-S
             f5star(keyArr, auts);
-            response_message[0] = 51;
+            response_message[0] = 52; // 52h -> 4d
         }
         free(temp);
 
