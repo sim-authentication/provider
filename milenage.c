@@ -160,6 +160,18 @@ void f5star(u8* keyArr, u8* sqn_ak) {
         printf("%02x", sqn_ak[i]);
         sqn[i] = ak[i] ^ sqn_ak[i];
     }
+    
+    u8 ind = (sqn[5] & 0b00011111);
+    u8 seq = (sqn[5] & 0b11100000);
+    ind = (ind + 1) % 32;
+    sqn[5] = 0;
+    sqn[5] |= ind;
+    
+    seq += 0b00100000;
+    if (seq == 0) {
+        sqn[4] += 1;
+    }
+    sqn[5] |= seq;
 }
 
 void convertToBin(u8* hexArr, u8* binArr) {
