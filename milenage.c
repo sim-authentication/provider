@@ -136,13 +136,12 @@ void f5star(u8* keyArr, u8* sqn_ak) {
         out5[i] ^= opc[i];
     }
 
-    printf("\r\nAK (neu): ");
+    printf("\r\nAK (f5*): ");
     for (i = 0; i < 6; i++) {
         ak[i] = out5[i];
         printf("%02x", ak[i]);
     }
     
-    printf("\r\nAK xor SQN: ");
     for (i = 0; i < 6; i++) {
         sqn[i] = ak[i] ^ sqn_ak[i];
     }
