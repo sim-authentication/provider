@@ -28,6 +28,7 @@ void f1(u8* keyArr, u8* mrand) {
     for (i = 0; i < 6; i++) {
         printf("%02x", sqn[i]);
     }
+    
     printf("\nAMF: ");
     for (i = 0; i < 2; i++) {
         printf("%02x", amf[i]);
@@ -43,29 +44,15 @@ void f1(u8* keyArr, u8* mrand) {
         in1[i + 14] = amf[i];
     }
 
-    printf("\nIN1: ");
-    for (i = 0; i < 16; i++) {
-        printf("%02x", in1[i]);
-    }
-
     printf("\nRAND: ");
     for (i = 0; i < 16; i++) {
         printf("%02x", mrand[i]);
-    }
-    printf("\nOPc: ");
-    for (i = 0; i < 16; i++) {
-        printf("%02x", opc[i]);
     }
 
     for (i = 0; i < 16; i++) {
         toEncrypt[i] = mrand[i] ^ opc[i];
     }
     encrypt(toEncrypt, keyArr, temp);
-
-    printf("\r\nTEMP: ");
-    for (i = 0; i < 16; i++) {
-        printf("%02x", temp[i]);
-    }
     
     for (i = 0; i < 16; i++) {
         out1[i] = in1[i]^opc[i];
@@ -157,7 +144,6 @@ void f5star(u8* keyArr, u8* sqn_ak) {
     
     printf("\r\nAK xor SQN: ");
     for (i = 0; i < 6; i++) {
-        printf("%02x", sqn_ak[i]);
         sqn[i] = ak[i] ^ sqn_ak[i];
     }
     

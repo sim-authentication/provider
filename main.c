@@ -14,6 +14,14 @@
 
 typedef unsigned char u8;
 
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+
 void rotWord(u8*, int, int);
 void convertToBin(u8*, u8*);
 
@@ -29,7 +37,7 @@ int main(int argc, char** argv) {
     //Create socket
     socket_desc = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_desc == -1) {
-        printf("Could not create socket");
+        printf(ANSI_COLOR_GREEN "Could not create socket" ANSI_COLOR_RESET);
     }
     puts("Socket created");
 
@@ -56,33 +64,38 @@ int main(int argc, char** argv) {
     //accept connection from an incoming client
     client_sock = accept(socket_desc, (struct sockaddr *) &client, (socklen_t*) & c);
     if (client_sock < 0) {
-        perror("accept failed");
+        perror(ANSI_COLOR_RED "accept failed" ANSI_COLOR_RESET);
         return 1;
     }
-    puts("Connection accepted");
+    puts(ANSI_COLOR_GREEN "Connection accepted" ANSI_COLOR_RESET);
 
     //Receive a message from client
     while ((read_size = recv(client_sock, client_message, 50, 0)) > 0) {
         char* temp;
         temp = malloc(2);
 
-	printf("\n");
-	puts(client_message);
-	printf("\n");
-
         strncpy(temp, &client_message[0], 1);
         status = strtol(temp, NULL, 10);
+
+	printf(ANSI_COLOR_BLUE "\nReceived message ");
+        if (status == 1) {
+            printf("(Status[1] || IMSI[15] )");
+        } else {
+            printf("(Status[1] || IMSI[15] || AUTS[28] )");
+        }
+        printf(": \n" ANSI_COLOR_RESET);
+	puts(client_message);
 
         strncpy(imsi, &client_message[1], 15);
         
         response_message[0] = 50; // 50h -> 2d
+            
+        printf(ANSI_COLOR_BLUE "\nCalculated values:" ANSI_COLOR_RESET);
 
         if (status == 3) {
-            printf("AUTS: ");
             for (i = 8; i < 22; i++) {
                 strncpy(temp, &client_message[i * 2], 2);
                 auts[i-8] = strtol(temp, NULL, 16);
-		printf("%02x",auts[i-8]);
             }
             
             //TODO: check MAC-S == XMAC-S
@@ -102,16 +115,19 @@ int main(int argc, char** argv) {
 
         //Send the message back to client
         write(client_sock, response_message, strlen(response_message));
+        
+	printf(ANSI_COLOR_BLUE "\n\nSent message (Status[1] || IMSI[15] || RAND[32] || AUTN[32] ): \n" ANSI_COLOR_RESET);
+	puts(response_message);
     }
 
     if (read_size == 0) {
-        puts("Client disconnected");
+        puts(ANSI_COLOR_YELLOW "\nClient disconnected" ANSI_COLOR_RESET);
         fflush(stdout);
     } else if (read_size == -1) {
-        perror("recv failed");
+        perror(ANSI_COLOR_RED "\nrecv failed" ANSI_COLOR_RESET);
     }
 
-    printf("\n\n");
+    printf("\n");
     return (EXIT_SUCCESS);
 }
 
