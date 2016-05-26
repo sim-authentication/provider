@@ -1,3 +1,10 @@
+/* 
+ * File:   milenage.c
+ * Author: Marco Heumann
+ *
+ * Created on 05. März 2016
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -10,6 +17,8 @@ void convertToBin(u8*, u8*);
 void convertToHex(u8*, u8*);
 void genRand(u8*, u8*);
 void genAutn(u8*);
+void rotWord(u8*, int, int);
+void convertToBin(u8*, u8*);
 
 u8 opc[16] = {0x25, 0x50, 0x07, 0x6C, 0x5E, 0xF5, 0x9F, 0x77, 0xEE, 0xBE, 0xF1, 0xCA, 0x39, 0x91, 0x6E, 0xC8};
 u8 c1[16] = {0x7C, 0x1E, 0xE3, 0x6E, 0x98, 0xC2, 0x74, 0x40, 0xCA, 0x1D, 0x58, 0xF7, 0xE8, 0xD3, 0x7D, 0x2F};
@@ -204,4 +213,19 @@ void genRand(u8* mrand, u8* response_arr) {
         mrand[i] = (unsigned)rand() % 255;
         sprintf(&response_arr[i*2], "%02x", mrand[i]);
     }
+}
+
+void reverse(u8* a, int sz) {
+    int i, j;
+    for (i = 0, j = sz; i < j; i++, j--) {
+        int tmp = a[i];
+        a[i] = a[j];
+        a[j] = tmp;
+    }
+}
+
+void rotWord(u8* array, int size, int amt) {
+    reverse(array, amt - 1);
+    reverse(array + amt, size - amt - 1);
+    reverse(array, size - 1);
 }

@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>milenage.h</itemPath>
       <itemPath>rijndael.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -43,6 +44,8 @@
       </item>
       <item path="milenage.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="milenage.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="rijndael.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="rijndael.h" ex="false" tool="3" flavor2="0">
@@ -71,6 +74,8 @@
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="milenage.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="milenage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="rijndael.c" ex="false" tool="0" flavor2="0">
       </item>
